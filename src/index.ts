@@ -8,6 +8,8 @@ import compression from 'compression'
 import rateLimit from 'express-rate-limit'
 import { ENV_CONFIG } from './v1/utils/const'
 import handleError from './v1/middlewares/handleError'
+import initRoutesV1 from './v1/routes'
+import { connectRedis } from './v1/config/redis.config'
 
 const app = express()
 
@@ -31,6 +33,9 @@ const limiter = rateLimit({
 
 app.use(limiter)
 
+connectRedis()
+
+initRoutesV1(app)
 app.get('/', (req: express.Request, res: express.Response) => {
   res.send('Express Server:1.0')
 })
